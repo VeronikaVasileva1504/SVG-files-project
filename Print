@@ -1,0 +1,49 @@
+package commands.models;
+
+import commands.Command;
+import svg.SVGRepository;
+import svg.models.Figure;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * The Print class represents a command to print all figures in the SVG repository.
+ * It implements the Command interface and defines the behavior of the 'print' command.
+ */
+public class Print implements Command {
+
+    private final Set<Figure> figures;
+
+    /**
+     * Constructs a Print command with the specified SVGRepository instance.
+     * @param repository the SVGRepository instance containing the figures
+     */
+    public Print(SVGRepository repository) {
+        this.figures = repository.getFigures();
+    }
+
+    /**
+     * Executes the 'print' command, printing each figure present in the repository.
+     */
+    @Override
+    public void execute(){
+      if(figures.isEmpty()){
+          System.out.println("There are no figures!");
+      }else {
+          // Convert HashSet to a List
+          List<Figure> sortedList = new ArrayList<>(figures);
+
+          Collections.sort(sortedList);
+
+          //Print the sorted List
+          for(Figure figure:sortedList){
+              System.out.println(figure);
+          }
+      }
+
+
+    }
+}
