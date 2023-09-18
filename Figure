@@ -1,0 +1,95 @@
+package svg.models;
+
+import java.util.Objects;
+
+/**
+ * An abstract class representing a generic geometric figure.
+ */
+public abstract class Figure implements Comparable <Figure>{
+    private int id;
+
+
+    /**
+     * Default constructor
+     */
+    public Figure(){}
+
+
+    /**
+     * Checks if the figure is equal to another object.
+     *
+     * @param o The object to compare with.
+     * @return True if the figure is equal to the object, false otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Figure figure = (Figure) o;
+        return id == figure.id;
+    }
+
+    /**
+     * Generates the hash code of the figure.
+     *
+     * @return The hash code of the figure.
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
+
+    /**
+     * Translates the figure by the specified horizontal and vertical amounts.
+     *
+     * @param horizontal The horizontal translation amount.
+     * @param vertical   The vertical translation amount.
+     */
+    public abstract void translate(float horizontal, float vertical);
+
+
+
+    /**
+     * Gets the width of the figure.
+     *
+     * @return The width of the figure.
+     */
+    public abstract float getWidth();
+    /**
+     * Gets the height of the figure.
+     *
+     * @return The height of the figure.
+     */
+    public abstract float getHeight();
+
+    /**
+     * Generates a string containing the main information about the figure.
+     *
+     * @return A string containing the main information about the figure.
+     */
+    public abstract String printMainInfo();
+    /**
+     * Gets the ID of the figure.
+     *
+     * @return The ID of the figure.
+     */
+    public int getId() {
+        return id;
+    }
+
+
+    /**
+     * Sets the ID of the figure.
+     *
+     * @param id The ID to set for the figure.
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    @Override
+    public int compareTo(Figure o) {
+        return this.getId()-o.getId();
+
+    }
+}
