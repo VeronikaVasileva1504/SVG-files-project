@@ -1,0 +1,136 @@
+package svg.models;
+
+import java.util.Objects;
+
+/**
+ * Represents a circle figure.
+ */
+public class CircleFigure extends Figure{
+    private float cx;
+    private float cy;
+    private final float radius;
+    private final String fill;
+
+    /**
+     * Constructs a circle figure with the specified attributes.
+     *
+     * @param cx     The x-coordinate of the center of the circle.
+     * @param cy     The y-coordinate of the center of the circle.
+     * @param radius The radius of the circle.
+     * @param fill   The fill color of the circle.
+     */
+    public CircleFigure(float cx, float cy, float radius, String fill) {
+        this.cx = cx;
+        this.cy = cy;
+        this.radius = radius;
+        this.fill = fill;
+    }
+
+    /**
+     * Checks whether this circle figure is equal to another object.
+     *
+     * @param o The object to compare with.
+     * @return {@code true} if the objects are equal, {@code false} otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        CircleFigure that = (CircleFigure) o;
+        return Float.compare(that.cx, cx) == 0 && Float.compare(that.cy, cy) == 0 && Float.compare(that.radius, radius) == 0;
+    }
+
+    /**
+     * Computes the hash code for this circle figure.
+     *
+     * @return The computed hash code value.
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), cx, cy, radius);
+    }
+
+    /**
+     * Generates a string representation of this circle figure.
+     *
+     * @return The string representation of the circle figure.
+     */
+    @Override
+    public String toString() {
+        return "\n("+ getId()+")Circle:" + "\ncx:"+cx+" \ncy:"+cy+" \nradius:"+radius+" \ncolor:"+fill;
+    }
+
+    @Override
+    public String printMainInfo(){
+        return "\nCircle:" + "\ncx:"+cx+" \ncy:"+cy+" \nradius:"+radius;
+    }
+
+    /**
+     * Translates the circle figure by the specified horizontal and vertical amounts.
+     *
+     * @param horizontal The amount to translate horizontally.
+     * @param vertical   The amount to translate vertically.
+     */
+    @Override
+    public void translate(float horizontal, float vertical) {
+        this.cx+=horizontal;
+        this.cy+=vertical;
+    }
+
+    /**
+     * Returns the width of the circle figure.
+     *
+     * @return The width of the circle figure (diameter).
+     */
+    @Override
+    public float getWidth() {
+        return radius * 2;
+    }
+
+    /**
+     * Returns the height of the circle figure.
+     *
+     * @return The height of the circle figure (diameter).
+     */
+    @Override
+    public float getHeight() {
+        return radius * 2;
+    }
+
+    /**
+     * Gets the center x-coordinate of the circle.
+     *
+     * @return The center x-coordinate of the circle.
+     */
+    public float getCx() {
+        return cx;
+    }
+
+    /**
+     * Gets the center y-coordinate of the circle.
+     *
+     * @return The center y-coordinate of the circle.
+     */
+    public float getCy() {
+        return cy;
+    }
+
+    /**
+     * Gets the radius of the circle.
+     *
+     * @return The radius of the circle.
+     */
+    public float getRadius() {
+        return radius;
+    }
+
+    /**
+     * Gets the fill color of the circle.
+     *
+     * @return The fill color of the circle.
+     */
+    public String getFill() {
+        return fill;
+    }
+}
