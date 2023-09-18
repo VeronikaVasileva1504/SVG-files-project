@@ -1,0 +1,34 @@
+package commands.models;
+
+
+import commands.Command;
+import svg.SVGService;
+
+/**
+ * The Save class represents a command to save the contents of the SVG repository into the currently opened SVG file.
+ * It implements the Command interface and defines the behavior of the 'save' command.
+ */
+public class Save implements Command {
+
+
+    private final SVGService svgService;
+
+    /**
+     * Constructs a Save command with the specified SVGService instance.
+     * @param svgService the SVGService instance used to manage SVG files and state
+     */
+    public Save(SVGService svgService) {
+        this.svgService = svgService;
+    }
+
+    /**
+     * Executes the 'save' command, exporting the contents of the repository to the currently opened SVG file.
+     * @throws Exception if an error occurs during the execution of the command
+     */
+    @Override
+    public void execute() throws Exception {
+        svgService.exportFromRepository();
+
+        System.out.println("File successfully saved "+ svgService.getLoadedFile().getAbsolutePath());
+    }
+}
