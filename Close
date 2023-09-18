@@ -1,0 +1,33 @@
+package commands.models;
+
+
+import commands.Command;
+import svg.SVGService;
+
+/**
+ * The Close class represents a command to close the currently opened SVG file.
+ * It implements the Command interface and defines the behavior of the 'close' command.
+ */
+public class Close implements Command {
+
+    private final SVGService svgService;
+
+    /**
+     * Constructs a Close command with the specified SVGService instance.
+     * @param svgService the SVGService instance used to manage SVG files and state
+     */
+    public Close(SVGService svgService) {
+        this.svgService = svgService;
+    }
+
+    /**
+     * Executes the 'close' command, closing the currently opened SVG file.
+     * Prints a success message and resets the repository and loaded file in the SVGService.
+     */
+    @Override
+    public  void execute() {
+        System.out.println("File successfully closed "+ svgService.getLoadedFile().getAbsolutePath());
+        svgService.setRepository(null);
+        svgService.setLoadedFile(null);
+    }
+}
