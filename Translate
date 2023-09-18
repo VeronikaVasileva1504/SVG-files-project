@@ -1,0 +1,67 @@
+package commands.models;
+
+import commands.Command;
+import svg.SVGRepository;
+import svg.models.Figure;
+
+import java.util.List;
+import java.util.Set;
+
+/**
+ * The Translate class represents a command to translate (move) one or all figures in the SVG repository.
+ * It implements the Command interface and defines the behavior of the 'translate' command.
+ */
+public class Translate implements Command {
+
+    private final int idToChange;
+
+    private final float vertical;
+
+    private final float horizontal;
+
+    private final Set<Figure> figures;
+
+    /**
+     * Constructs a Translate command with the specified SVGRepository instance and instruction list.
+     * The instruction list contains the ID of the figure to translate (if provided), and the vertical and horizontal translation values.
+     *
+     * @param repository   the SVGRepository instance containing the figures
+     * @param instructions the list of instructions for the translation
+     */
+    public Translate(SVGRepository repository, List<String> instructions) {
+        figures=repository.getFigures();
+        if(instructions.size()==3){
+            this.idToChange = Integer.parseInt(instructions.get(0));
+            this.vertical = Float.parseFloat(instructions.get(1));
+            this.horizontal = Float.parseFloat(instructions.get(2));
+        }else {
+            this.idToChange = 0;
+            this.vertical = Float.parseFloat(instructions.get(0));
+            this.horizontal = Float.parseFloat(instructions.get(1));
+        }
+    }
+
+    /**
+     * Executes the 'translate' command, translating one or all figures based on the provided instructions.
+     * If the ID is provided, the specified figure is translated; otherwise, all figures are translated.
+     * @throws Exception if an error occurs during the execution of the command
+     */
+    @Override
+    public void execute() throws Exception {
+        if(idToChange==0){
+            for(Figure figure:figures){
+                figure.translate(vertical,horizontal);
+            }
+            System.out.println("All figures were successfully translated.");
+        }else {
+            for(Figure figure:figures){
+                if(idToChange==figure.getId()){
+                    figure.translate(vertical,horizontal);
+                    System.out.println("Figure successfully translated.");
+                    break;
+                }
+            }
+        }
+
+    }
+}
