@@ -1,0 +1,52 @@
+package commands.models;
+
+import commands.Command;
+import svg.SVGRepository;
+import svg.models.Figure;
+
+import java.util.List;
+import java.util.Set;
+
+/**
+ * The Erase class represents a command to erase a shape with a specified ID from the SVG repository.
+ * It implements the Command interface and defines the behavior of the 'erase' command.
+ */
+public class Erase implements Command {
+
+    private final Set<Figure> figures;
+    private final int idToErase;
+
+    /**
+     * Constructs an Erase command with the specified SVGRepository instance and instruction list.
+     *
+     * @param repository   the SVGRepository instance containing the figures
+     * @param instructions the list of instructions for erasing a shape
+     */
+    public Erase(SVGRepository repository, List<String> instructions) {
+        figures = repository.getFigures();
+        this.idToErase = Integer.parseInt(instructions.get(0));
+    }
+
+    /**
+     * Executes the 'erase' command, removing the shape with the specified ID from the repository.
+     * Prints a success message if the shape is erased.
+     *
+     * @throws Exception if an error occurs during the execution of the command
+     */
+    @Override
+    public void execute() throws Exception {
+        for (Figure figure : figures) {
+            if (figure.getId() == idToErase) {
+                if (figures.remove(figure)) {
+                    System.out.println("Figure erased successfully!");
+
+                } else {
+                    System.out.println("There is no figures with number: "+idToErase);
+                }
+                break;
+            }
+        }
+
+    }
+
+}
