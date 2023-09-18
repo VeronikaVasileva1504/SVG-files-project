@@ -1,0 +1,43 @@
+import java.util.Set;
+
+/**
+ * Represents a repository for storing a collection of Figure objects.
+ */
+public class SVGRepository {
+    private final Set<Figure> figures;
+
+    /**
+     * Creates a new SVGRepository instance with an empty collection of figures.
+     */
+    public SVGRepository() {
+        this.figures = new HashSet<>();
+    }
+
+    /**
+     * Adds a Figure object to the repository.
+     *
+     * @param figure The Figure object to be added.
+     * @return True if the figure was added successfully, otherwise false.
+     */
+    public boolean addFigure(Figure figure){
+        return figures.add(figure);
+    }
+
+    /**
+     * Retrieves the set of Figure objects stored in the repository.
+     *
+     * @return The set of Figure objects.
+     */
+    public Set<Figure> getFigures() {
+        return figures;
+    }
+
+    /**
+     * Checks if the repository is empty.
+     *
+     * @return True if the repository is empty, otherwise false.
+     */
+    public boolean isEmpty(){
+        return figures.isEmpty();
+    }
+}
