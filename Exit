@@ -1,0 +1,36 @@
+package commands.models;
+
+
+import commands.Command;
+import svg.SVGService;
+
+/**
+ * The Exit class represents a command to exit the SVG application.
+ * It implements the Command interface and defines the behavior of the 'exit' command.
+ */
+public class Exit implements Command {
+
+
+    private SVGService svgService;
+
+    /**
+     * Constructs an Exit command with the specified SVGService instance.
+     * @param svgService the SVGService instance used to manage SVG files and state
+     */
+    public Exit(SVGService svgService) {
+        this.svgService = svgService;
+    }
+
+    /**
+     * Executes the 'exit' command, clearing resources and terminating the application.
+     * Cleans up the SVGService state, invokes the garbage collector, and exits the program.
+     */
+    @Override
+    public void execute() {
+        svgService.setRepository(null);
+        svgService.setLoadedFile(null);
+        svgService=null;
+        System.gc();//?
+        System.exit(0);
+    }
+}
