@@ -1,0 +1,100 @@
+package commands;
+
+/**
+ * Enum class for all commands
+ */
+public enum Commands {
+    /**
+     * Command to open a file.
+     */
+    OPEN("open","<file>","Opens <file>."),
+    /**
+     * Command to close the currently opened file.
+     */
+    CLOSE("close"," ","Closes currently opened file."),
+    /**
+     * Command to save the currently open file.
+     */
+    SAVE("save"," ","Saves the currently open file."),
+    /**
+     * Command to save the currently open file in a new file.
+     */
+    SAVEAS("saveas","<file>","saves the currently open file in <file>."),
+    /**
+     * Command to print all the available commands and their descriptions.
+     */
+    HELP("help"," ","Prints this information."),
+
+    /**
+     * Command to exit the program.
+     */
+    EXIT("exit"," ","Exists the program."),
+    /**
+     * Command to print all figures on screen.
+     */
+    PRINT("print"," ","Prints all figures on screen."),
+    /**
+     * Command to create a new shape.
+     */
+    CREATE("create"," ","Creates a new shape."),
+
+    /**
+     * Command to delete a shape with a specified sequence number.
+     */
+    ERASE("erase","<n>","Deletes a shape with sequence number <n>."),
+    /**
+     * Command to translate a shape horizontally and vertically.
+     */
+    TRANSLATE("translate","[<n>] <horizontal> <vertical>","Casts the shape with sequence number <n> or all shapes if\n" +
+            "<n> not specified."),
+
+    /**
+     * Command to display shapes that are completely contained within a specified region.
+     */
+    WITHIN("within","<option>", "Displays all figures that are entirely contained in a given region. The user can specify via <option> which to be the region – circle or rectangle");
+
+    /**
+     * Instructions of the command
+     */
+    private final String name;
+
+    /**
+     * Instructions of the command
+     */
+    private final String instructions;
+
+    /**
+     * Description of the command
+     */
+    private final String description;
+
+    /**
+     Constructs a new command with the given name, instructions and description.
+     @param name the name of the command
+     @param instructions the usage instructions for the command
+     @param description the description of the command
+     */
+    Commands(String name, String instructions, String description){
+        this.name=name;
+        this.instructions=instructions;
+        this.description=description;
+    }
+
+    /**
+     * Returns the name of the command.
+     * @return the name of the command
+     */
+    public String getName() {
+        return name;
+    }
+
+
+    /**
+     * Returns the instructions of the command.
+     * @return the instructions of the command
+     */
+    public String getInstructions() {
+        return instructions;
+    }
+
+}
