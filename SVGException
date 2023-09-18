@@ -1,0 +1,15 @@
+package exceptions;
+
+/**
+ * The SVGException class represents a custom exception for handling errors specific to the SVG application.
+ * It extends the Exception class and is used to handle various exceptions related to SVG operations and commands.
+ */
+public class SVGException extends Exception{
+    /**
+     * Constructs an SVGException with the specified error message.
+     * @param message the error message associated with the exception
+     */
+    public SVGException(String message) {
+        super(message);
+    }
+}
