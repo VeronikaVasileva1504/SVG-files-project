@@ -1,0 +1,97 @@
+package svg;
+
+import parsers.svg.SVGParser;
+
+import java.io.File;
+
+/**
+ * Represents a service for managing SVG data and interactions with a repository.
+ */
+public class SVGService {
+
+
+    private File loadedFile;
+
+
+    private SVGRepository repository;
+
+
+    private final SVGParser parser;
+
+
+    /**
+     * Constructs an SVGService with the specified repository and parser.
+     *
+     * @param repository The repository to store Figure objects.
+     * @param parser     The file parser for reading and writing repository data.
+     */
+   public SVGService(SVGRepository repository, SVGParser parser) {
+       this.repository = repository;
+       this.parser = parser;
+   }
+
+    /**
+     * Imports data from the loaded file into the repository.
+     *
+     * @throws Exception If an error occurs during the import process.
+     */
+    public void importToRepository() throws Exception {
+            repository = parser.readFile(loadedFile);
+    }
+
+    /**
+     * Exports data from the repository to the loaded file.
+     *
+     * @throws Exception If an error occurs during the export process.
+     */
+    public void exportFromRepository() throws Exception {
+        parser.writeFile(repository,loadedFile);
+    }
+
+    /**
+     * Creates a file if it does not exist and writes repository data to it.
+     *
+     * @throws Exception If an error occurs during the file creation or writing process.
+     */
+    public void createFileIfNotExist() throws Exception {
+        parser.writeFile(repository,loadedFile);
+    }
+
+    /**
+     * Retrieves the currently loaded file.
+     *
+     * @return The loaded File object.
+     */
+    public File getLoadedFile() {
+        return loadedFile;
+    }
+
+    /**
+     * Sets the loaded file to the specified File object.
+     *
+     * @param loadedFile The File object to be set as the loaded file.
+     */
+    public void setLoadedFile(File loadedFile) {
+        this.loadedFile = loadedFile;
+    }
+
+    /**
+     * Retrieves the repository associated with the service.
+     *
+     * @return The SVGRepository object.
+     */
+    public SVGRepository getRepository() {
+        return repository;
+    }
+
+    /**
+     * Sets the repository for the service.
+     *
+     * @param repository The SVGRepository object to be set.
+     */
+    public void setRepository(SVGRepository repository) {
+        this.repository = repository;
+    }
+
+
+}
