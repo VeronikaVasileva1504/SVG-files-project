@@ -1,0 +1,13 @@
+package commands;
+
+/**
+ * The Command interface represents an action or operation that can be executed.
+ * Implementing classes define the behavior of the specific command.
+ */
+public interface Command {
+    /**
+     * Executes the defined action or operation.
+     * @throws Exception if an error occurs during the execution of the command
+     */
+    void execute() throws Exception;
+}
