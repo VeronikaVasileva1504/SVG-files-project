@@ -1,0 +1,40 @@
+package svg.enums;
+
+/**
+ * Enumeration representing different types of figures.
+ */
+public enum FigureType {
+    /**
+     * Represents a circle figure type.
+     */
+    CIRCLE("circle"),
+    /**
+     * Represents a rectangle figure type.
+     */
+    RECTANGLE("rectangle"),
+    /**
+     * Represents a line figure type.
+     */
+    LINE("line");
+
+
+    private final String name;
+
+    /**
+     * Constructs a FigureType enum constant with the specified name.
+     *
+     * @param name The name associated with the figure type.
+     */
+    FigureType(String name) {
+        this.name = name;
+    }
+
+    /**
+     * Returns the name of the figure type.
+     *
+     * @return The name of the figure type.
+     */
+    public String getName() {
+        return name;
+    }
+}
