@@ -1,0 +1,103 @@
+package svg.models;
+
+import exceptions.CommandException;
+import svg.enums.FigureType;
+
+import java.util.List;
+
+/**
+ * A factory class responsible for creating instances of different types of figures.
+ */
+public class FigureFactory {
+
+    public static int figureCounter;
+
+    /**
+     * Default constructor
+     */
+    public FigureFactory(){}
+
+
+    /**
+     * Creates a figure based on the given type and instruction list.
+     *
+     * @param figureType      The type of figure to create.
+     * @param instructionList The list of instructions to create the figure.
+     * @return The created figure.
+     * @throws CommandException If the figure type is not supported by the program.
+     */
+    public Figure getFigure(FigureType figureType, List<String> instructionList) throws CommandException {
+        Figure figure;
+        switch (figureType){
+            case LINE -> figure=createLineFigure(instructionList);
+
+            case RECTANGLE -> figure=createRectangleFigure(instructionList);
+
+            case CIRCLE -> figure=createCircleFigure(instructionList);
+
+            default -> throw new CommandException(figureType + "not supported by the program.");
+        }
+        figure.setId(++figureCounter);
+        return figure;
+    }
+
+    /**
+     * Creates a CircleFigure based on the provided instruction list.
+     *
+     * @param instructionList The list of instructions for creating a CircleFigure.
+     * @return The created CircleFigure instance.
+     */
+    private CircleFigure createCircleFigure(List<String> instructionList){
+        float cx= Float.parseFloat(instructionList.get(1));
+        float cy= Float.parseFloat(instructionList.get(2));
+        float radius= Float.parseFloat(instructionList.get(3));
+        String fill;
+        if(instructionList.size()==5)
+            fill= instructionList.get(4);
+        else
+            fill="black";
+
+        return new CircleFigure(cx,cy,radius,fill);
+    }
+
+    /**
+     * Creates a LineFigure based on the provided instruction list.
+     *
+     * @param instructionList The list of instructions for creating a LineFigure.
+     * @return The created LineFigure instance.
+     */
+    private LineFigure createLineFigure(List<String> instructionList){
+        float x1= Float.parseFloat(instructionList.get(1));
+        float y1= Float.parseFloat(instructionList.get(2));
+        float x2= Float.parseFloat(instructionList.get(3));
+        float y2= Float.parseFloat(instructionList.get(4));
+        String stroke;
+        if(instructionList.size()==6)
+            stroke= instructionList.get(5);
+        else
+            stroke="black";
+
+        return new LineFigure( x1,y1,x2,y2,stroke);
+    }
+
+    /**
+     * Creates a RectangleFigure based on the provided instruction list.
+     *
+     * @param instructionList The list of instructions for creating a RectangleFigure.
+     * @return The created RectangleFigure instance.
+     */
+    private RectangleFigure createRectangleFigure(List<String> instructionList){
+
+        float x= Float.parseFloat(instructionList.get(1));
+        float y= Float.parseFloat(instructionList.get(2));
+        float height= Float.parseFloat(instructionList.get(3));
+        float width= Float.parseFloat(instructionList.get(4));
+        String fill;
+        if(instructionList.size()==6)
+            fill= instructionList.get(5);
+        else
+            fill="black";
+
+        return new RectangleFigure( x,y,height,width,fill);
+    }
+}
