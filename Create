@@ -1,0 +1,61 @@
+package commands.models;
+
+import commands.Command;
+import exceptions.CommandException;
+import svg.SVGRepository;
+import svg.enums.FigureType;
+import svg.models.*;
+
+import java.util.List;
+
+/**
+ * The Create class represents a command to create a new shape and add it to the SVG repository.
+ * It implements the Command interface and defines the behavior of the 'create' command.
+ */
+public class Create implements Command {
+
+    private final SVGRepository repository;
+
+    private final List<String> instructionList;
+
+    /**
+     * Constructs a Create command with the specified SVGRepository instance and instruction list.
+     * @param repository     the SVGRepository instance used to store shapes
+     * @param instructionList the list of instructions for creating the shape
+     */
+    public Create(SVGRepository repository, List<String> instructionList) {
+        this.repository = repository;
+        this.instructionList = instructionList;
+    }
+
+    /**
+     * Executes the 'create' command, creating a new shape based on the provided instructions and adding it to the repository.
+     * Prints a success message if the shape is added, otherwise, informs if the figure already exists in the file.
+     * @throws Exception if an error occurs during the execution of the command
+     */
+    @Override
+    public void execute() throws Exception {
+        FigureFactory factory=new FigureFactory();
+
+        FigureType figureType = parseOption(instructionList.get(0));
+
+        if(repository.addFigure(factory.getFigure(figureType,instructionList)))
+            System.out.println("Figure successfully added!");
+        else
+            System.out.println("This figure already exists in the file.");
+    }
+
+    /**
+     * Parses the option string to a FigureType enum value.
+     * @param option the option string to be parsed
+     * @return the corresponding FigureType enum value if recognized
+     * @throws CommandException if the option is not recognized
+     */
+    private FigureType parseOption(String option) throws CommandException {
+        for(FigureType value:FigureType.values())
+            if(value.getName().equals(option))
+                return FigureType.valueOf(option.toUpperCase());
+
+        throw new CommandException(option + " is not recognized as an option!");
+    }
+}
