@@ -1,0 +1,38 @@
+package commands.models;
+
+
+import commands.Command;
+
+/**
+ * The Help class represents a command to display information about available commands and their descriptions.
+ * It implements the Command interface and defines the behavior of the 'help' command.
+ */
+public class Help implements Command {
+
+    /**
+     * Constructs a Help command.
+     */
+    public Help(){}
+
+    /**
+    * Displays a help message that provides information about available commands.
+    * The message includes a description of each command along with any required
+    * or optional parameters.
+    */
+    @Override
+    public void execute() {
+        System.out.println("""
+                open        <file>                          Opens file
+                close                                       Closes currently opened file
+                save                                        Saves the currently open file
+                saveas      <file>                          saves the currently open file in file
+                help                                        Prints this information
+                exit                                        Exists the program
+                print                                       Prints all figures on screen
+                create      [parameters]                    Creates a new shape
+                erase       <n>                             Deletes a shape with sequence number <n>
+                translate   [<n>] <horizontal> <vertical>   Casts the shape with sequence number <n> or all shapes if <n> not specified
+                within      <option>                        Displays all figures that are entirely contained in a given region. The user can specify via <option> which to be the region – circle or rectangle
+                """);
+    }
+}
