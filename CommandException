@@ -1,0 +1,15 @@
+package exceptions;
+
+/**
+ * The CommandException class represents an exception specific to command-related errors in the SVG application.
+ * It extends the SVGException class and is used to handle exceptions related to command execution and parsing.
+ */
+public class CommandException extends SVGException{
+    /**
+     * Constructs a CommandException with the specified error message.
+     * @param message the error message associated with the exception
+     */
+    public CommandException(String message) {
+        super(message);
+    }
+}
