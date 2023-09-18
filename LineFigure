@@ -1,0 +1,161 @@
+package svg.models;
+
+import java.util.Objects;
+
+/**
+ * Represents a line figure in an SVG image.
+ */
+public class LineFigure extends Figure{
+    private float x1;
+    private float y1;
+    private float x2;
+    private float y2;
+    private final String stroke;
+
+    /**
+     * Constructs a new LineFigure with the specified coordinates and stroke color.
+     *
+     * @param x1     The x-coordinate of the start point of the line.
+     * @param y1     The y-coordinate of the start point of the line.
+     * @param x2     The x-coordinate of the end point of the line.
+     * @param y2     The y-coordinate of the end point of the line.
+     * @param stroke The stroke color of the line.
+     */
+    public LineFigure(float x1, float y1, float x2, float y2, String stroke) {
+        this.x1 = x1;
+        this.y1 = y1;
+        this.x2 = x2;
+        this.y2 = y2;
+        this.stroke=stroke;
+    }
+
+    /**
+     * Compares this LineFigure to another object for equality.
+     *
+     * @param o The object to compare with.
+     * @return {@code true} if the objects are equal, {@code false} otherwise.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        LineFigure that = (LineFigure) o;
+        return Float.compare(that.x1, x1) == 0 && Float.compare(that.y1, y1) == 0 && Float.compare(that.x2, x2) == 0 && Float.compare(that.y2, y2) == 0;
+    }
+
+    /**
+     * Generates a hash code for this LineFigure.
+     *
+     * @return The hash code value for this object.
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), x1, y1, x2, y2);
+    }
+
+
+    /**
+     * Returns a string representation of this LineFigure.
+     *
+     * @return A string representation of this object.
+     */
+    @Override
+    public String toString() {
+        return "\n("+ getId()+")Line: " + "\nx1:"+ x1 + "\ny1: "+ y1+" \nx2:"+x2+" \ny2:"+y2+"\ncolor: "+stroke;
+    }
+
+    /**
+     * Returns the main information about this LineFigure.
+     *
+     * @return A string containing the main information about this object.
+     */
+    @Override
+    public String printMainInfo() {
+        return "\nLine: " + "\nx1:"+ x1 + "\ny1: "+ y1+" \nx2:"+x2+" \ny2:"+y2;
+    }
+
+
+    /**
+     * Translates this LineFigure by the specified horizontal and vertical amounts.
+     *
+     * @param horizontal The amount to translate horizontally.
+     * @param vertical   The amount to translate vertically.
+     */
+    @Override
+    public void translate(float vertical, float horizontal) {
+        this.x1+=horizontal;
+        this.x2+=horizontal;
+        this.y1+=vertical;
+        this.y2+=vertical;
+    }
+
+
+
+
+    /**
+     * Returns the width of this LineFigure.
+     *
+     * @return The width of this object.
+     */
+    @Override
+    public float getWidth() {
+        return Math.abs(x2 - x1);
+    }
+
+    /**
+     * Returns the height of this LineFigure.
+     *
+     * @return The height of this object.
+     */
+    @Override
+    public float getHeight() {
+        return Math.abs(y2 - y1);
+    }
+
+    /**
+     * Returns the x-coordinate of the start point of the line.
+     *
+     * @return The x-coordinate of the start point.
+     */
+    public float getX1() {
+        return x1;
+    }
+
+    /**
+     * Returns the y-coordinate of the start point of the line.
+     *
+     * @return The y-coordinate of the start point.
+     */
+    public float getY1() {
+        return y1;
+    }
+
+    /**
+     * Returns the x-coordinate of the end point of the line.
+     *
+     * @return The x-coordinate of the end point.
+     */
+    public float getX2() {
+        return x2;
+    }
+
+    /**
+     * Returns the y-coordinate of the end point of the line.
+     *
+     * @return The y-coordinate of the end point.
+     */
+    public float getY2() {
+        return y2;
+    }
+
+    /**
+     * Returns the stroke color of the line.
+     *
+     * @return The stroke color.
+     */
+    public String getStroke() {
+        return stroke;
+    }
+
+}
