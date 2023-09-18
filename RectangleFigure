@@ -1,0 +1,137 @@
+package svg.models;
+
+import java.util.Objects;
+
+/**
+ * Represents a rectangle figure with specified coordinates, width, height, and fill color.
+ */
+public class RectangleFigure extends Figure{
+    private float x;
+    private float y;
+    private final float width;
+    private final float height;
+    private final String fill;
+
+    /**
+     * Creates a new RectangleFigure with the specified parameters.
+     *
+     * @param x     The x-coordinate of the top-left corner of the rectangle.
+     * @param y     The y-coordinate of the top-left corner of the rectangle.
+     * @param height The height of the rectangle.
+     * @param width The width of the rectangle.
+     * @param fill  The fill color of the rectangle.
+     */
+    public RectangleFigure(float x, float y, float height, float width, String fill) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.fill = fill;
+    }
+
+    /**
+     * Checks whether this RectangleFigure is equal to another object.
+     *
+     * @param o The object to compare.
+     * @return True if the objects are equal, otherwise false.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        RectangleFigure that = (RectangleFigure) o;
+        return Float.compare(that.x, x) == 0 && Float.compare(that.y, y) == 0 && Float.compare(that.width, width) == 0 && Float.compare(that.height, height) == 0;
+    }
+
+    /**
+     * Computes the hash code for this RectangleFigure.
+     *
+     * @return The computed hash code.
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), x, y, width, height);
+    }
+
+    /**
+     * Returns a string representation of this RectangleFigure.
+     *
+     * @return A string describing the properties of the rectangle.
+     */
+    @Override
+    public String toString() {
+        return "\n("+ getId()+")Rectangle:" + "\nx:"+x+" \ny:"+y+" \nheight:"+height+"\nwidth:"+width+" \ncolor:"+fill;
+    }
+
+    /**
+     * Returns the main information about this RectangleFigure.
+     *
+     * @return A string containing the main properties of the rectangle.
+     */
+    @Override
+    public String printMainInfo() {
+        return "\nRectangle:" + "\nx:"+x+" \ny:"+y+" \nheight:"+height+"\nwidth:"+width;
+    }
+
+    /**
+     * Translates the rectangle by a specified horizontal and vertical distance.
+     *
+     * @param horizontal The horizontal distance to translate.
+     * @param vertical   The vertical distance to translate.
+     */
+    @Override
+    public void translate(float horizontal, float vertical) {
+        this.x+=horizontal;
+        this.y+=vertical;
+    }
+
+
+
+    /**
+     * Returns the width of the rectangle.
+     *
+     * @return The width of the rectangle.
+     */
+    @Override
+    public float getWidth() {
+        return width;
+    }
+
+    /**
+     * Returns the height of the rectangle.
+     *
+     * @return The height of the rectangle.
+     */
+    @Override
+    public float getHeight() {
+        return height;
+    }
+
+    /**
+     * Returns the x-coordinate of the top-left corner of the rectangle.
+     *
+     * @return The x-coordinate of the top-left corner.
+     */
+    public float getX() {
+        return x;
+    }
+
+    /**
+     * Returns the y-coordinate of the top-left corner of the rectangle.
+     *
+     * @return The y-coordinate of the top-left corner.
+     */
+    public float getY() {
+        return y;
+    }
+
+    /**
+     * Returns the fill color of the rectangle.
+     *
+     * @return The fill color.
+     */
+    public String getFill() {
+        return fill;
+    }
+}
