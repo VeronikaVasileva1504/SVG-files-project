@@ -1,0 +1,68 @@
+package commands.models;
+
+import commands.Command;
+import svg.SVGRepository;
+import svg.SVGService;
+import svg.models.FigureFactory;
+
+import java.io.File;
+import java.util.List;
+
+/**
+ * The Open class represents a command to open an SVG file and load its contents into the SVG repository.
+ * It implements the Command interface and defines the behavior of the 'open' command.
+ */
+public class Open implements Command {
+
+
+    private final SVGService svgService;
+
+
+    private String fileDirectory;
+
+    /**
+     * Constructs an Open command with the specified SVGService instance and instruction list.
+     *
+     * @param svgService    the SVGService instance used to manage SVG files and state
+     * @param instructions  the list of instructions containing the file directory
+     */
+    public Open(SVGService svgService, List<String> instructions) {
+        this.svgService = svgService;
+        this.fileDirectory = instructions.get(0);
+    }
+
+    /**
+     * Executes the 'open' command, loading the contents of the specified SVG file into the repository.
+     * If the file doesn't exist, a new file is created and loaded.
+     *
+     * @throws Exception if an error occurs during the execution of the command
+     */
+    @Override
+    public void execute() throws Exception {
+
+        if(!fileDirectory.endsWith(".svg")) {
+            fileDirectory += ".svg";//?
+        }
+
+        svgService.setLoadedFile(new File(fileDirectory));
+        svgService.setRepository(new SVGRepository());
+
+        if(svgService.getLoadedFile().exists()) {
+
+            svgService.importToRepository();
+
+            System.out.println("File successfully opened: " + fileDirectory);
+
+            if (svgService.getRepository().isEmpty()) {
+                System.out.println("File is empty.");
+            }
+
+            FigureFactory.figureCounter=svgService.getRepository().getFigures().size();
+        }else {
+
+            System.out.println("File not found.");
+            svgService.createFileIfNotExist();
+            System.out.println("New file was created and loaded: " + fileDirectory);
+        }
+    }
+}
