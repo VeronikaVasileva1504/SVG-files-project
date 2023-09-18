@@ -1,0 +1,164 @@
+package commands.models;
+
+import commands.Command;
+import exceptions.CommandException;
+import svg.SVGRepository;
+import svg.models.Figure;
+import svg.models.FigureFactory;
+import svg.enums.FigureType;
+import svg.models.*;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+/**
+ * The Within class represents a command to find figures within a specified shape in the SVG repository.
+ * It implements the Command interface and defines the behavior of the 'within' command.
+ */
+public class Within implements Command {
+    private final Set<Figure> figures;
+
+    private final Figure figureToSearch;
+
+    /**
+     * Constructs a Within command with the specified SVGRepository instance and instruction list.
+     * The instruction list contains the type of the shape to search within and its parameters.
+     *
+     * @param repository   the SVGRepository instance containing the figures
+     * @param instructions the list of instructions for the 'within' command
+     * @throws CommandException if an error occurs during the parsing of the command
+     */
+    public Within(SVGRepository repository, List<String> instructions) throws CommandException {
+        FigureFactory factory=new FigureFactory();
+        FigureType figureType=parseCommand(instructions.get(0));
+        this.figureToSearch=factory.getFigure(figureType,instructions);
+
+        this.figures = repository.getFigures();
+    }
+
+    /**
+     * Checks if a given figure is completely contained within another figure.
+     *
+     * @param figure The figure to be checked.
+     * @return True if the given figure is completely contained within the other figure; otherwise, false.
+     * @throws Exception If the figures have incompatible types or if there's an error during the check.
+     */
+    private boolean checkFigure(Figure figure) throws Exception {
+        if(figureToSearch instanceof CircleFigure && figure instanceof CircleFigure){
+
+            double cx1=((CircleFigure) figure).getCx();
+            double cy1=((CircleFigure) figure).getCy();
+            double r1=((CircleFigure) figure).getRadius();
+
+            double cx2=((CircleFigure) figureToSearch).getCx();
+            double cy2=((CircleFigure) figureToSearch).getCy();
+            double r2=((CircleFigure) figureToSearch).getRadius();
+
+
+
+            return cx1+r1<=cx2+r2 && cx1-r1>=cx2-r2 && cy1-r1>=cy2-r2 && cx1+r1<=cy2+r2;
+        }else if(figureToSearch instanceof RectangleFigure && figure instanceof CircleFigure){
+            double cx=((CircleFigure) figure).getCx();
+            double cy=((CircleFigure) figure).getCy();
+            double r=((CircleFigure) figure).getRadius();
+
+            double x=((RectangleFigure) figureToSearch).getX();
+            double y=((RectangleFigure) figureToSearch).getY();
+            double width=figureToSearch.getWidth();
+            double height=figureToSearch.getHeight();
+
+            // Calculate the coordinates of the four points on the circle's perimeter
+            double leftX = cx - r;
+            double rightX = cx + r;
+            double topY = cy - r;
+            double bottomY = cy + r;
+
+            // Check if all four points are inside the rectangle
+            return (leftX >= x && rightX <= x + width && topY >= y && bottomY <= y + height);
+
+        }else if(figureToSearch instanceof RectangleFigure && figure instanceof RectangleFigure){
+            double x1=((RectangleFigure) figure).getX();
+            double y1=((RectangleFigure) figure).getY();
+            double w1=figure.getWidth();
+            double h1=figure.getHeight();
+
+            double x2=((RectangleFigure) figureToSearch).getX();
+            double y2= ((RectangleFigure) figureToSearch).getY();
+            double w2=figureToSearch.getWidth();
+            double h2=figureToSearch.getHeight();
+
+            return x1>=x2 && x1+w1<=x2+w2 && y1>=y2 && y1+h1<=y2+h2;
+        }else if(figureToSearch instanceof CircleFigure && figure instanceof RectangleFigure){
+            double cx= ((CircleFigure) figureToSearch).getCx();
+            double cy= ((CircleFigure) figureToSearch).getCy();
+            double r=((CircleFigure) figureToSearch).getRadius();
+
+            double x=((RectangleFigure) figure).getX();
+            double y=((RectangleFigure) figure).getY();
+            double width=figure.getWidth();
+            double height=figure.getHeight();
+
+            double dx = Math.abs(cx - (x + width / 2));
+            double dy = Math.abs(cy - (y + height / 2));
+
+            // Calculate half the width and half the height of the rectangle
+            double halfRectangleWidth = width / 2;
+            double halfRectangleHeight = height / 2;
+
+            // Check if both the horizontal and vertical distances are less than or equal to the circle's radius
+            return (dx <= r- halfRectangleWidth && dy <= r - halfRectangleHeight);
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Executes the 'within' command, finding and printing figures located within the specified shape.
+     *
+     * @throws Exception if an error occurs during the execution of the command
+     */
+    @Override
+    public void execute() throws Exception {
+        Set<Figure> foundedFigures=new HashSet<>();
+
+        for(Figure figure:figures){
+            if(checkFigure(figure)){
+                foundedFigures.add(figure);
+            }
+        }
+
+        printFoundedFigures(foundedFigures);
+    }
+
+    /**
+     * Prints the figures that are found within the specified shape, or a message if none are found.
+     *
+     * @param foundFigures the set of figures found within the specified shape
+     */
+    private void printFoundedFigures(Set<Figure> foundFigures){
+        if(foundFigures.isEmpty()){
+            System.out.println("No figures are located within:" + figureToSearch.printMainInfo());
+        }else {
+            for (Figure figure : foundFigures) {
+                System.out.println(figure);
+            }
+        }
+    }
+
+    /**
+     * Parses the provided shape name into a FigureType enum value.
+     *
+     * @param shapeName the name of the shape to parse
+     * @return the corresponding FigureType enum value
+     * @throws CommandException if the shape name is not recognized
+     */
+    private FigureType parseCommand(String shapeName) throws CommandException {
+        for(FigureType value:FigureType.values())
+            if(value.getName().equals(shapeName))
+                return FigureType.valueOf(shapeName.toUpperCase());
+
+        throw new CommandException(shapeName + " is not recognized as an internal command!");
+    }
+}
