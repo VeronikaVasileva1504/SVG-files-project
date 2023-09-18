@@ -1,0 +1,202 @@
+package cli;
+
+import commands.Command;
+import commands.CommandFactory;
+import exceptions.CommandException;
+import commands.Commands;
+import parsers.svg.SVGParser;
+import svg.SVGRepository;
+import svg.SVGService;
+
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Scanner;
+
+/**
+ * The CommandLineInterface class represents the command-line interface for interacting with the SVG application.
+ * It handles user input, processes commands, and delegates command execution.
+ */
+public class CommandLineInterface {
+    private SVGRepository instance; //  Обект,съхраняващ фигурите от SVG файловете
+    private SVGParser svgParser; //Обект,използван за парсиране на файловете
+    private SVGService svgService; //Обект,който предоставя услуги за манипулиране на SVG данните
+    private CommandFactory commandFactory; // Обект,използван за създаване на команди
+    private List<String> inputString; //Списък за съхранение на входящата команда, разделена на отделни компоненти
+    private List<String> instructions; // Списък за съхранение на инструкциите, асоциирани с командата
+
+    private final static Scanner scanner=new Scanner(System.in);
+
+
+    /**
+     * Constructs a CommandLineInterface instance with necessary dependencies and initializes lists.
+     */
+    public CommandLineInterface(){
+        instance =new SVGRepository();
+        svgParser=new SVGParser();
+        svgService=new SVGService(instance,svgParser);
+        commandFactory=new CommandFactory(svgService);
+        inputString=new ArrayList<>();
+        instructions=new ArrayList<>();
+    }
+
+    /**
+     * Starts the command-line interface, continually processing user input.
+     */
+    public void start() {
+        System.out.println("~ SVG ~\n");
+
+        while(true) {
+            System.out.print(">");
+
+            String input= scanner.nextLine();
+
+            processCommand(input);
+        }
+    }
+
+    /**
+     * Parses the input command string and returns the corresponding Commands enum value.
+     *
+     * @param command the input command string to be parsed
+     * @return the corresponding Commands enum value if recognized
+     * @throws CommandException if the input command is not recognized
+     */
+    private Commands parseCommand(String command) throws CommandException {
+        for(Commands value:Commands.values())
+            if(value.getName().equals(command))
+                return Commands.valueOf(command.toUpperCase());
+
+        throw new CommandException(command + " is not recognized as an internal command!");
+    }
+
+    /**
+     * Checks and processes the input string, splitting it into individual components.
+     * @param input the input string to be checked and processed
+     * @return true if the input is valid and contains components, false otherwise
+     */
+    private boolean checkInput(String input){
+        if(input.equals(""))
+            return false;
+
+        String regex="\\s+"; //"\\s+" представлява "един или повече интервала" и  се използва за разделяне на низа
+        inputString = Arrays.asList(input.split(regex));
+
+        if(inputString.isEmpty())
+            return false;
+
+        instructions = new ArrayList<>(inputString.subList(1,inputString.size()));
+
+        return true;
+    }
+
+    /**
+     * Processes the input command string, parses it, validates instructions, and executes the corresponding command.
+     * @param input the input command string to be processed
+     */
+    private void processCommand(String input) {
+
+        if(checkInput(input)){
+            try {
+                Commands command=parseCommand(inputString.get(0));
+
+                checkInstructionsLength(instructions,command);
+
+                Command manufacturedCommand=commandFactory.getCommand(command,instructions);
+
+                manufacturedCommand.execute();
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    /**
+     * Checks the validity of the number of instructions for a given command and figure type.
+     *
+     * @param instructions the list of instructions for the command
+     * @param command      the command for which instructions are being checked
+     * @throws CommandException if the instructions are invalid for the specified command and figure type
+     */
+    private void checkInstructionsLength(List<String> instructions, Commands command) throws CommandException {
+        int defaultInstructionsSize=command.getInstructions().split(" ").length;
+
+        switch (command){
+            case TRANSLATE ->{
+                if (instructions.size() < 2 || instructions.size() > 3) {
+                    throw new CommandException("'" + command + "' expects " + command.getInstructions());
+                }
+            }
+
+            case CREATE -> {
+                String figure;
+
+                try {
+                    figure = instructions.get(0);
+                }catch (IndexOutOfBoundsException e){
+                    throw new CommandException("'"+command+" expects figure name");
+                }
+
+                switch (figure){
+                    case "circle" -> {
+                        if (instructions.size()<4||instructions.size() > 5) {
+                            throw new CommandException("'" + command +" "+ figure+" ' expects cx,cy,r, [color]");
+                        }
+                    }
+                    case "line" -> {
+                        if (instructions.size() != 6) {
+                            throw new CommandException("'" + command +" " +figure+" ' expects x1,y1,x2,y2,[color]");
+                        }
+                    }
+                    case "rectangle" -> {
+                        if (instructions.size() < 5 || instructions.size() > 6) {
+                            throw new CommandException("'" + command +" " +figure+" ' expects x,y,width,height,[color]");
+                        }
+                    }
+                    default -> throw new CommandException("'"+figure+"' is not recognized as internal command");
+                }
+            }
+
+            case WITHIN ->{
+                String figure;
+
+                try {
+                    figure = instructions.get(0);
+                }catch (IndexOutOfBoundsException e){
+                    throw new CommandException("'"+command+" expects figure name");
+                }
+
+
+                switch (figure){
+                    case "circle" -> {
+                        if (instructions.size()<4||instructions.size() > 5) {
+                            throw new CommandException("'" + command +" "+ figure+" ' expects cx,cy,r");
+                        }
+                    }
+                    case "line" -> {
+                        if (instructions.size() != 6) {
+                            throw new CommandException("'" + command +" " +figure+" ' expects x1,y1,x2,y2");
+                        }
+                    }
+                    case "rectangle" -> {
+                        if (instructions.size() < 5 || instructions.size() > 6) {
+                            throw new CommandException("'" + command +" " +figure+" ' expects x,y,width,height");
+                        }
+                    }
+                    default -> throw new CommandException("'"+figure+"' is not recognized as internal command");
+                }
+            }
+
+            default -> {
+                if (instructions.size() != defaultInstructionsSize) {
+
+                    if (command.getInstructions().equals(" "))
+                        throw new CommandException("'" + command + "' does not expects arguments.");
+                    else
+                        throw new CommandException("'" + command + "' expects " + command.getInstructions());
+                }
+            }
+        }
+    }
+}
