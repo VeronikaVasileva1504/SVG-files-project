@@ -1,0 +1,72 @@
+package commands;
+
+import commands.models.*;
+import exceptions.CommandException;
+import svg.SVGService;
+
+import java.util.List;
+
+/**
+ * The CommandFactory class is responsible for creating instances of different commands based on the specified command type and instructions.
+ */
+public class CommandFactory {
+
+
+    private final SVGService svgService;//Основна функционалност за управление на SVG файловете и графичните обекти
+
+    /**
+     * Constructs a CommandFactory with the specified SVGService instance.
+     *
+     * @param svgService the SVGService instance used to manage SVG files and commands
+     */
+    public CommandFactory(SVGService svgService) {
+        this.svgService = svgService;
+    }
+
+    /**
+     * Retrieves a specific command based on the provided command type and instructions.
+     *
+     * @param command      the command type to retrieve
+     * @param instructions additional instructions for the command
+     * @return a Command instance corresponding to the provided command type
+     * @throws CommandException if there's an issue creating the command
+     */
+    public Command getCommand(Commands command, List<String> instructions) throws CommandException {
+
+        if(checkIfFileIsLoaded()) {
+            switch (command) {
+                case EXIT -> { return new Exit(svgService); }
+                case HELP -> { return new Help(); }
+                case CLOSE -> { return new Close(svgService); }
+                case SAVE -> { return new Save(svgService); }
+                case SAVEAS -> { return new SaveAs(svgService, instructions); }
+                case OPEN -> throw new CommandException("There is currently opened file:" + svgService.getLoadedFile().getAbsolutePath());
+                case PRINT -> { return new Print(svgService.getRepository()); }
+                case WITHIN -> { return new Within(svgService.getRepository(),instructions);  }
+                case ERASE -> { return new Erase(svgService.getRepository(),instructions); }
+                case CREATE -> { return new Create(svgService.getRepository(),instructions); }
+                case TRANSLATE -> { return new Translate(svgService.getRepository(),instructions); }
+
+                default -> throw new CommandException("Current operation not found!");
+            }
+        }
+        else {
+            switch (command) {
+                case EXIT -> { return new Exit(svgService); }
+                case HELP -> { return new Help(); }
+                case OPEN -> { return new Open(svgService, instructions); }
+                default -> throw new CommandException("There is no currently opened file at the moment.");
+            }
+        }
+    }
+
+    /**
+     * Checks if a file is currently loaded in the SVGService instance.
+     *
+     * @return true if a file is loaded, false otherwise
+     */
+    private boolean checkIfFileIsLoaded(){
+        return svgService.getLoadedFile() != null;
+    }
+
+}
